@@ -22,12 +22,9 @@ st.markdown("""
     }
     .stApp { background-color: #FFFFFF; }
     
-    /* SOBE O TEXTO NA ABA LATERAL PARA O TOPO ABSOLUTO */
+    /* SOBRE O CONTEÚDO DA ABA LATERAL SEM SOBREPOSIÇÃO */
     [data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
-        padding-top: 0rem !important;
-    }
-    [data-testid="stSidebar"] .stMarkdown {
-        margin-top: -2.5rem !important;
+        padding-top: 1rem !important;
     }
     
     [data-testid="stSidebar"] { 
@@ -64,7 +61,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 2. BARRA LATERAL 
+# 2. BARRA LATERAL
 with st.sidebar:
     st.markdown("### 🏛️ Sobre o PTT")
     st.markdown("""
@@ -182,22 +179,22 @@ with col_p:
     st.markdown("## 📋 Portaria 1.261/2010")
     icp = sum([render_item(f"P{i+18}", txt, "card-portaria") for i, txt in enumerate(port_txt)]) / 18
 
-# 6. RESULTADOS E GRÁFICOS 
+# 6. RESULTADOS E GRÁFICOS
 st.write("---")
 icn = (icl + icp) / 2
 g1, g2, g3 = st.columns(3)
 layout_c = {'x':0.5, 'xanchor': 'center', 'font': {'color': 'black'}}
 
-# Espessuras padronizadas
-w_estreita = 0.4
-w_espessa = 0.7
+# Espessuras calibradas para harmonia visual
+w_estreita = 0.3
+w_total = 0.5 
 
 with g1:
     f1 = go.Figure(go.Bar(
         x=['G-I', 'G-II', 'G-III', 'ICL'], 
         y=scores_l + [icl], 
         marker_color=['#FFB347', '#FFB347', '#FFB347', '#EB5E28'],
-        width=[w_estreita, w_estreita, w_estreita, w_espessa],
+        width=[w_estreita, w_estreita, w_estreita, w_total],
         text=[f"{v:.2f}" for v in scores_l + [icl]], 
         textposition='auto'
     ))
@@ -209,7 +206,7 @@ with g2:
         x=['Média ICP'], 
         y=[icp], 
         marker_color='#FFD700',
-        width=[w_espessa],
+        width=[w_total],
         text=[f"{icp:.2f}"], 
         textposition='auto'
     ))
@@ -221,7 +218,7 @@ with g3:
         x=['Geral (ICN)'], 
         y=[icn], 
         marker_color='#EB5E28',
-        width=[w_espessa],
+        width=[w_total],
         text=[f"{icn:.2f}"], 
         textposition='auto'
     ))
@@ -240,12 +237,12 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# 7. EXPORTAÇÃO E SALVAMENTO (TTL=0)
+# 7. EXPORTAÇÃO E SALVAMENTO
 output = BytesIO()
 with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
     pd.DataFrame(respostas_excel).to_excel(writer, index=False)
 
-st.write("<br>", unsafe_allow_html=True) # Espaçamento extra antes do botão
+st.write("<br>", unsafe_allow_html=True)
 
 if st.download_button("📥 Gerar Relatório Profissional (Excel)", 
                       data=output.getvalue(), 
