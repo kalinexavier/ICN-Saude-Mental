@@ -35,10 +35,10 @@ with st.sidebar:
     st.write("3. Clique em **Gerar Relatório** ao finalizar.")
     st.write("4. O índice varia de 0 a 1,00.")
     
-    # Alerta customizado solicitado
+    # Alerta customizado com correção de cor
     st.markdown("""
         <div style="background-color: #FFFFFF; border: 2px solid #EB5E28; padding: 15px; border-radius: 10px;">
-            <p style="color: #EB5E28; font-weight: bold; margin: 0; font-size: 0.85rem;">
+            <p style="color: #EB5E28 !important; font-weight: bold; margin: 0; font-size: 0.85rem;">
                 ⚠️ O instrumento serve como termômetro para a instituição, mas não deve ser utilizado para simples atendimento métrico. A saúde mental é um tema sério e deve ser tratado com responsabilidade.
             </p>
         </div>
@@ -182,3 +182,4 @@ st.markdown(f"""
         Mestrado Profissional em Gestão Pública | UFPE</p>
     </div>
 """, unsafe_allow_html=True)
+
