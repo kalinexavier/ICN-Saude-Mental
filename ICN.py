@@ -182,7 +182,7 @@ with g3:
 
 st.markdown(f"<div class='res-box-clean'><p style='color: #000; font-weight: bold; margin-bottom: 2px; font-size: 0.85rem;'>Índice Geral de Conformidade</p><h1 style='font-size: 2.5rem !important; color: #EB5E28; margin:0;'>{icn:.2f}</h1></div>", unsafe_allow_html=True)
 
-# 6. EXPORTAÇÃO E SALVAMENTO (GOOLGE SHEETS)
+# 6. EXPORTAÇÃO E SALVAMENTO (VERSÃO ROBUSTA)
 output = BytesIO()
 with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
     pd.DataFrame(respostas_excel).to_excel(writer, index=False)
@@ -194,7 +194,9 @@ try:
                           type="primary", 
                           use_container_width=True):
         
-        # Prepara a linha para o Google Sheets
+        # O sistema busca a URL direto dos Secrets
+        url_planilha = st.secrets["connections"]["gsheets"]["spreadsheet"]
+        
         nova_linha = pd.DataFrame([{
             "Data": pd.Timestamp.now().strftime("%d/%m/%Y %H:%M"),
             "Instituicao": nome_inst,
@@ -204,15 +206,16 @@ try:
             "ICN": round(icn, 2)
         }])
         
-        # ATENÇÃO: Verifique se o nome da aba é Página1 ou Sheet1
-        existentes = conn.read(worksheet="Página1")
+        # Lendo e atualizando usando a URL explícita
+        existentes = conn.read(spreadsheet=url_planilha, worksheet="Página1")
         atualizado = pd.concat([existentes, nova_linha], ignore_index=True)
-        conn.update(worksheet="Página1", data=atualizado)
+        conn.update(spreadsheet=url_planilha, worksheet="Página1", data=atualizado)
         
         st.success("✅ Diagnóstico registrado com sucesso no banco de dados da UFPE!")
 
 except Exception as e:
-    st.error(f"Erro ao salvar dados na planilha: {e}")
+    # Esta linha vai nos dizer EXATAMENTE o que falta se falhar
+    st.error(f"Erro detalhado: {e}")
 
 # 7. RODAPÉ ORIGINAL RESTAURADO
 st.write("<br>", unsafe_allow_html=True)
@@ -224,3 +227,4 @@ st.markdown(f"""
         Mestrado Profissional em Gestão Pública | UFPE</p>
     </div>
 """, unsafe_allow_html=True)
+
