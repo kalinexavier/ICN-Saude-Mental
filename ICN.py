@@ -6,7 +6,7 @@ from io import BytesIO
 # 1. CONFIGURAÇÃO DA PÁGINA
 st.set_page_config(page_title="ICN - Kaline Xavier", layout="wide", page_icon="📊")
 
-# ESTILIZAÇÃO CSS FINAL
+# ESTILIZAÇÃO CSS
 st.markdown("""
     <style>
     html, body, [class*="st-"] {
@@ -43,38 +43,40 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 2. BARRA LATERAL (ABA)
+# 2. BARRA LATERAL (TEXTOS ORIGINAIS RESTAURADOS)
 with st.sidebar:
     st.markdown("### 🏛️ Sobre o PTT")
     st.markdown("""
         <div style="color: white; text-align: justify; font-size: 0.82rem; margin-bottom: 10px;">
             Este produto técnico-tecnológico é resultante da dissertação de mestrado intitulada 
             <b>"A POLÍTICA DE SAÚDE MENTAL DA UNIVERSIDADE FEDERAL DE PERNAMBUCO: Entre a Normativa e a Realidade Laboral à Luz da Psicodinâmica do Trabalho"</b>, 
-            do Mestrado Profissional em Gestão Pública da UFPE.
+            do Mestrado Profissional em Gestão Pública para o Desenvolvimento Do Nordeste - CCSA da UFPE.
             <br><br>
             Ele funciona como uma calculadora para mensurar a aderência institucional às normativas federais de saúde mental no trabalho: 
-            <b>Lei Nº 14.831/2024</b> e <b>Portaria SRH/MP Nº 1.261/2010</b> (SIPEC).
+            <b>Lei Nº 14.831/2024</b> (Certificado Empresa Promotora da Saúde Mental) e à 
+            <b>Portaria SRH/MP Nº 1.261/2010</b> (Princípios, Diretrizes e Ações em Saúde Mental para os órgãos e entidades do Sistema de Pessoal Civil - SIPEC da Administração Pública Federal).
         </div>
     """, unsafe_allow_html=True)
+    
     st.markdown("<hr>", unsafe_allow_html=True)
     st.markdown("### 📝 Instruções")
     st.markdown("""
-        <ul style="color: white; font-size: 0.82rem; padding-left: 15px;">
-            <li>Marque os itens atendidos pela instituição</li>
-            <li>Descreva a Evidência ou o Plano de Ação</li>
-            <li>Clique em Gerar Relatório ao final</li>
-        </ul>
-    """, unsafe_allow_html=True)
-    st.markdown("""
-        <div style="background-color: white; padding: 10px; border-radius: 8px; text-align: left; margin-top: 5px;">
+        <div style="color: white; font-size: 0.82rem;">
+            1. Clique na caixa de seleção para os itens que forem atendidos pela instituição.<br><br>
+            2. Descreva a <b>Evidência</b>, caso o indicador seja atendido. Caso não seja, escreva o <b>Plano de Ação</b>.<br><br>
+            3. Depois do preenchimento, clique em gerar Relatório para obter o resumo.<br><br>
+            4. Quanto mais próximo o indicador estiver de <b>1,00</b>, mais próximo do total atendimento da normativa.
+        </div>
+        <div style="background-color: white; padding: 10px; border-radius: 8px; text-align: left; margin-top: 15px;">
             <span style="color: #EB5E28 !important; font-weight: bold; font-size: 0.72rem; line-height: 1.2;">
-                ⚠️ O instrumento serve como termômetro, mas a saúde mental é um tema sério e deve ser tratado com responsabilidade.
+                ⚠️ O instrumento serve como termômetro para a instituição, mas não deve ser utilizado para simples atendimento métrico. A saúde mental é um tema sério e deve ser tratado com responsabilidade.
             </span>
         </div>
     """, unsafe_allow_html=True)
 
 # 3. PÁGINA PRINCIPAL
-st.markdown("<h1>Índice de Conformidade às Normativas Federais</h1>", unsafe_allow_html=True)
+st.markdown("<h1>Índice de Conformidade às Normativas Federais de Saúde Mental</h1>", unsafe_allow_html=True)
+
 c_id1, c_id2 = st.columns(2)
 with c_id1:
     nome_inst = st.text_input("🏢 Nome da Instituição/Unidade:", placeholder="Ex: UFPE - Progepe")
@@ -83,7 +85,7 @@ with c_id2:
 
 st.write("---")
 
-# 4. DICIONÁRIOS (FRASES UNIFORMES)
+# 4. DICIONÁRIOS COMPLETOS (SEM PONTUAÇÃO FINAL)
 lei_grupos = {
     "Grupo I - Promoção da saúde mental": [
         "implementação de programas de promoção da saúde mental no ambiente de trabalho",
@@ -111,23 +113,23 @@ lei_grupos = {
 }
 
 port_txt = [
-    "promover ações que mantenham e fortaleçam vínculos entre os servidores em sofrimento psíquico, seus familiares, seus representantes, na sua comunidade e no trabalho",
+    "promover ações que mantenham e fortaleçam vínculos entre os servidores em sofrimento psíquico, seus familiares, seus representantes, na sua comunidade e no trabalho, tornandoos parceiros no planejamento do tratamento e na constituição de redes de apoio e integração social a todos os envolvidos",
     "realizar programas e ações fundamentados em informações epidemiológicas, considerando as especificidades e as vulnerabilidades do público-alvo",
-    "realizar as ações de promoção inclusivas com respeito à pluralidade cultural e às diferenças sociais, buscando combater o estigma das pessoas com sofrimento psíquico",
+    "realizar as ações de promoção inclusivas com respeito à pluralidade cultural e às diferenças de religião, gênero, orientação sexual, cor/raça/etnia, habilidade física ou intelectual, classe e idade/geração, buscando combater o estigma das pessoas com sofrimento psíquico",
     "promover a concepção ampliada de saúde mental, integrada à saúde física e ao bem-estar socioeconômico dos servidores",
-    "planejar e direcionar as ações de promoção ao desenvolvimento humano e ao incentivo à educação para a vida saudável",
-    "ampliar a divulgação e integração dos serviços de saúde mental da rede pública e dos órgãos da APF",
+    "planejar e direcionar as ações de promoção ao desenvolvimento humano, ao incentivo à educação para a vida saudável, com acesso aos bens culturais",
+    "ampliar a divulgação e integração dos serviços de saúde mental da rede pública, dos órgãos da APF e da rede conveniada, assim como gerir em nível local a forma de procurálos e utilizálos",
     "detectar precocemente, acolher e monitorar o tratamento da pessoa com sofrimento psíquico",
-    "realizar ações com o objetivo de combater o estigma das pessoas com transtornos mentais, incluindo orientação aos demais trabalhadores",
-    "estabelecer e registrar nexo causal entre os processos de trabalho, o sofrimento psíquico e os transtornos mentais",
-    "identificar nos locais de trabalho os fatores envolvidos no adoecimento mental e propor medidas de intervenção",
-    "intervir nas situações de conflito vivenciadas no local de trabalho, buscando soluções dialogadas e ações mediadas",
-    "oferecer suporte ao desenvolvimento das competências e habilidades do servidor ao encontro das metas e objetivos institucionais",
-    "disponibilizar espaços terapêuticos nos ambientes de trabalho quando integrados à Política de Atenção à Saúde",
+    "realizar ações, em vários níveis de interlocução, com o objetivo de combater o estigma das pessoas com transtornos mentais, incluindo orientação aos demais trabalhadores da instituição sobre sofrimento psíquico e doenças mentais e o apoio à criação e ao fortalecimento de associações da rede social e familiar",
+    "estabelecer e registrar nexo causal entre os processos de trabalho, o sofrimento psíquico e os transtornos mentais e comportamentais",
+    "identificar nos locais de trabalho os fatores envolvidos no adoecimento mental, mapear os locais e os tipos de atividades e propor medidas de intervenção no ambiente e na organização do trabalho no intuito de valorizar o servidor e diminuir o sofrimento psíquico",
+    "intervir nas situações de conflito vivenciadas no local de trabalho, buscando soluções dialogadas e ações mediadas pela equipe multiprofissional, constituindo comissões de ética onde não existirem, como instâncias de mediação no âmbito institucional",
+    "oferecer suporte ao desenvolvimento das competências e habilidades do servidor, ao encontro das metas e objetivos a serem alcançados, auxiliando-o inclusive no desenvolvimento eficaz de seus projetos de vida",
+    "disponibilizar espaços terapêuticos nos ambientes de trabalho quando as ações estiverem integradas à Política de Atenção à Saúde dos Servidores",
     "garantir a realização das atividades de promoção à saúde no horário de trabalho",
     "incentivar na Administração Pública Federal a implantação de Programas de Preparação à Aposentadoria - PPA",
-    "identificar situações de trabalho penosas do ponto de vista da saúde mental e propor intervenções necessárias",
-    "privilegiar programas de promoção da qualidade de vida como meio de ampliar os fatores de proteção aos servidores",
+    "identificar situações de trabalho penosas do ponto de vista da saúde mental, propondo as intervenções necessárias",
+    "privilegiar programas de promoção da qualidade de vida, como meio de ampliar os fatores de proteção aos portadores de transtornos mentais e de diminuir a recorrência das crises",
     "capacitar os gestores para identificar sofrimento psíquico no trabalho"
 ]
 
@@ -155,7 +157,7 @@ with col_p:
     st.markdown("## 📋 Portaria 1.261/2010")
     icp = sum([render_item(f"P{i+18}", txt, "Portaria 1.261", "card-portaria") for i, txt in enumerate(port_txt)]) / 18
 
-# 5. GRÁFICOS E ICN
+# 5. RESULTADOS E GRÁFICOS
 st.write("---")
 icn = (icl + icp) / 2
 g1, g2, g3 = st.columns(3)
@@ -178,12 +180,20 @@ with g3:
 
 st.markdown(f"<div class='res-box-clean'><p style='color: #000; font-weight: bold; margin-bottom: 2px; font-size: 0.85rem;'>Índice Geral de Conformidade</p><h1 style='font-size: 2.5rem !important; color: #EB5E28; margin:0;'>{icn:.2f}</h1></div>", unsafe_allow_html=True)
 
-# 6. EXCEL E DOWNLOAD
+# 6. EXPORTAÇÃO
 output = BytesIO()
 with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
     pd.DataFrame(respostas_excel).to_excel(writer, index=False)
 
 st.download_button("📥 Gerar Relatório Profissional (Excel)", data=output.getvalue(), file_name=f"ICN_{nome_inst}.xlsx", type="primary", use_container_width=True)
 
-# 7. RODAPÉ
-st.markdown(f"<p style='text-align: center; color: black; font-size: 0.75rem; margin-top:20px;'>Sistema idealizado por Kaline Xavier | Orientador: Denilson Marques<br>UFPE</p>", unsafe_allow_html=True)
+# 7. RODAPÉ ORIGINAL RESTAURADO
+st.write("<br>", unsafe_allow_html=True)
+st.markdown(f"""
+    <div style='text-align: center; color: #444; font-size: 0.82rem; line-height: 1.6;'>
+        <p><b>Sistema idealizado por Kaline Mirele Silva Xavier sob Orientação do docente Denilson Bezerra Marques.</b><br>
+        Contatos: kaline.xavier@ufpe.br | denilson.marques@ufpe.br | gp.pdt@ufpe.br</p>
+        <p>Gestão Pública, Prazer e Sofrimento no Trabalho <b>(@gp.pdt.ufpe)</b><br>
+        Mestrado Profissional em Gestão Pública | UFPE</p>
+    </div>
+""", unsafe_allow_html=True)
