@@ -110,7 +110,7 @@ with c_id2:
 
 st.write("---")
 
-# 4. DICIONÁRIOS COM NOMES COMPLETOS
+# 4. DICIONÁRIOS COM NOMES COMPLETOS (REVISADOS)
 lei_grupos = {
     "Grupo I - Promoção da saúde mental": [
         "implementação de programas de promoção da saúde mental no ambiente de trabalho;",
@@ -131,30 +131,30 @@ lei_grupos = {
         "incentivo à comunicação integrativa;"
     ],
     "Grupo III - Transparência e prestação de contas": [
-        "divulgação regular das ações e das políticas relacionadas à promoção da saúde mental e do bem-estar...",
+        "divulgação regular das ações e das políticas relacionadas à promoção da saúde mental e do bem-estar de seus trabalhadores nos meios de comunicação utilizados pela empresa;",
         "manutenção de canal para recebimento de sugestões e de avaliações;",
-        "promoção do desenvolvimento de metas e análises periódicas dos resultados relacionados à implementação..."
+        "promoção do desenvolvimento de metas e análises periódicas dos resultados relacionados à implementação das ações de saúde mental."
     ]
 }
 
 port_txt = [
-    "promover ações que mantenham e fortaleçam vínculos entre os servidores em sofrimento psíquico...",
-    "realizar programas e ações fundamentados em informações epidemiológicas...",
-    "realizar as ações de promoção inclusivas com respeito à pluralidade cultural...",
-    "promover a concepção ampliada de saúde mental...",
-    "planejar e direcionar as ações de promoção ao desenvolvimento humano...",
-    "ampliar a divulgação e integração dos serviços de saúde mental da rede pública...",
+    "promover ações que mantenham e fortaleçam vínculos entre os servidores em sofrimento psíquico, seus familiares, seus representantes, na sua comunidade e no trabalho, tornando-os parceiros no planejamento do tratamento e na constituição de redes de apoio e integração social a todos os envolvidos",
+    "realizar programas e ações fundamentados em informações epidemiológicas, considerando as especificidades e as vulnerabilidades do público-alvo",
+    "realizar as ações de promoção inclusivas com respeito à pluralidade cultural e às diferenças de religião, gênero, orientação sexual, cor/raça/etnia, habilidade física ou intelectual, classe e idade/geração, buscando combater o estigma das pessoas com sofrimento psíquico",
+    "promover a concepção ampliada de saúde mental, integrada à saúde física e ao bem-estar socioeconômico dos servidores",
+    "planejar e direcionar as ações de promoção ao desenvolvimento humano, ao incentivo à educação para a vida saudável, com acesso aos bens culturais",
+    "ampliar a divulgação e integração dos serviços de saúde mental da rede pública, dos órgãos da APF e da rede conveniada, assim como gerir em nível local a forma de procurá-los e utilizá-los",
     "detectar precocemente, acolher e monitorar o tratamento da pessoa com sofrimento psíquico",
-    "realizar ações com o objetivo de combater o estigma das pessoas com transtornos mentais...",
-    "estabelecer e registrar nexo causal entre os processos de trabalho e transtornos mentais...",
-    "identificar fatores de adoecimento e propor medidas de intervenção...",
-    "intervir em situações de conflito buscando soluções dialogadas...",
-    "oferecer suporte ao desenvolvimento das competências e habilidades do servidor...",
-    "disponibilizar espaços terapêuticos integrados à Política de Atenção...",
+    "realizar ações, em vários níveis de interlocução, com o objetivo de combater o estigma das pessoas com transtornos mentais, incluindo orientação aos demais trabalhadores da instituição sobre sofrimento psíquico e doenças mentais e o apoio à criação e ao fortalecimento de associações da rede social e familiar",
+    "estabelecer e registrar nexo causal entre os processos de trabalho, o sofrimento psíquico e os transtornos mentais e comportamentais",
+    "identificar nos locais de trabalho os fatores envolvidos no adoecimento mental, mapear os locais e os tipos de atividades e propor medidas de intervenção no ambiente e na organização do trabalho no intuito de valorizar o servidor e diminuir o sofrimento psíquico",
+    "intervir nas situações de conflito vivenciadas no local de trabalho, buscando soluções dialogadas e ações mediadas pela equipe multiprofissional, constituindo comissões de ética onde não existirem, como instâncias de mediação no âmbito institucional",
+    "oferecer suporte ao desenvolvimento das competências e habilidades do servidor, ao encontro das metas e objetivos a serem alcançados, auxiliando-o inclusive no desenvolvimento eficaz de seus projetos de vida",
+    "disponibilizar espaços terapêuticos nos ambientes de trabalho quando as ações estiverem integradas à Política de Atenção à Saúde dos Servidores",
     "garantir a realização das atividades de promoção à saúde no horário de trabalho",
-    "incentivar a implantação de Programas de Preparação à Aposentadoria - PPA",
-    "identificar situações de trabalho penosas do ponto de vista da saúde mental",
-    "privilegiar programas de promoção da qualidade de vida como fator de proteção",
+    "incentivar na Administração Pública Federal a implantação de Programas de Preparação à Aposentadoria - PPA",
+    "identificar situações de trabalho penosas do ponto de vista da saúde mental, propondo as intervenções necessárias",
+    "privilegiar programas de promoção da qualidade de vida, como meio de ampliar os fatores de proteção aos portadores de transtornos mentais e de diminuir a recorrência das crises",
     "capacitar os gestores para identificar sofrimento psíquico no trabalho."
 ]
 
@@ -223,3 +223,4 @@ st.download_button("📥 Gerar Relatório Profissional (Excel)", data=output.get
 
 # 7. RODAPÉ
 st.markdown(f"<p style='text-align: center; color: black; font-size: 0.75rem; margin-top:20px;'>Sistema idealizado por Kaline Xavier | Orientador: Denilson Marques<br>UFPE</p>", unsafe_allow_html=True)
+
