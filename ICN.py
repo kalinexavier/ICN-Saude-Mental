@@ -182,7 +182,7 @@ with g3:
 
 st.markdown(f"<div class='res-box-clean'><p style='color: #000; font-weight: bold; margin-bottom: 2px; font-size: 0.85rem;'>Índice Geral de Conformidade</p><h1 style='font-size: 2.5rem !important; color: #EB5E28; margin:0;'>{icn:.2f}</h1></div>", unsafe_allow_html=True)
 
-# 6. EXPORTAÇÃO E SALVAMENTO (SISTEMA DE DIAGNÓSTICO)
+# 6. EXPORTAÇÃO E SALVAMENTO (VERSÃO CORRIGIDA)
 output = BytesIO()
 with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
     pd.DataFrame(respostas_excel).to_excel(writer, index=False)
@@ -193,34 +193,35 @@ if st.download_button("📥 Gerar Relatório Profissional (Excel)",
                       type="primary", 
                       use_container_width=True):
     try:
-        # 1. Verifica se os Secrets existem
-        if "connections" not in st.secrets:
-            st.error("Erro: Configurações de 'Secrets' não encontradas no Streamlit Cloud.")
+        url_planilha = st.secrets["connections"]["gsheets"]["spreadsheet"]
+        
+        # Criamos a nova linha com os nomes EXATOS da planilha
+        nova_linha = pd.DataFrame([{
+            "Data": pd.Timestamp.now().strftime("%d/%m/%Y %H:%M"),
+            "Instituicao": str(nome_inst),
+            "Contato": str(contato_resp),
+            "ICL": float(icl),
+            "ICP": float(icp),
+            "ICN": float(icn)
+        }])
+        
+        # Lemos os dados existentes
+        existentes = conn.read(spreadsheet=url_planilha, worksheet="Página1")
+        
+        # Se a planilha estiver vazia ou com erro de colunas, garantimos que os dados se alinhem
+        if existentes is not None and not existentes.empty:
+            # Forçamos a nova linha a ter as mesmas colunas da planilha atual
+            atualizado = pd.concat([existentes, nova_linha], ignore_index=True, sort=False)
         else:
-            # 2. Tenta capturar a URL
-            url_planilha = st.secrets["connections"]["gsheets"]["spreadsheet"]
+            atualizado = nova_linha
             
-            nova_linha = pd.DataFrame([{
-                "Data": pd.Timestamp.now().strftime("%d/%m/%Y %H:%M"),
-                "Instituicao": nome_inst,
-                "Contato": contato_resp,
-                "ICL": round(icl, 2),
-                "ICP": round(icp, 2),
-                "ICN": round(icn, 2)
-            }])
-            
-            # 3. Tenta ler a planilha (Aqui é onde a maioria dos erros acontece)
-            # Tente mudar "Página1" para "Sheet1" se a sua planilha estiver em inglês
-            existentes = conn.read(spreadsheet=url_planilha, worksheet="Página1")
-            atualizado = pd.concat([existentes, nova_linha], ignore_index=True)
-            
-            # 4. Tenta gravar
-            conn.update(spreadsheet=url_planilha, worksheet="Página1", data=atualizado)
-            st.success("✅ Diagnóstico registrado com sucesso no banco de dados da UFPE!")
+        # Atualiza a planilha (isso adiciona a linha nova mantendo as antigas)
+        conn.update(spreadsheet=url_planilha, worksheet="Página1", data=atualizado)
+        
+        st.success("✅ Diagnóstico registrado com sucesso no banco de dados!")
 
     except Exception as e:
-        st.error(f"Ocorreu um problema técnico: {e}")
-        st.info("Dica: Verifique se você compartilhou a planilha com o e-mail da conta de serviço como 'Editor'.")
+        st.error(f"Erro ao salvar: {e}")
 
 # 7. RODAPÉ ORIGINAL RESTAURADO
 st.write("<br>", unsafe_allow_html=True)
@@ -232,5 +233,6 @@ st.markdown(f"""
         Mestrado Profissional em Gestão Pública | UFPE</p>
     </div>
 """, unsafe_allow_html=True)
+
 
 
