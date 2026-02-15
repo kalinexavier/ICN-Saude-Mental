@@ -262,7 +262,7 @@ if st.download_button("📥 Gerar Relatório Profissional (Excel)",
         existentes = conn.read(spreadsheet=url_planilha, worksheet="Página1", ttl=0)
         df_final = pd.concat([existentes, nova_linha], ignore_index=True) if existentes is not None else nova_linha
         conn.update(spreadsheet=url_planilha, worksheet="Página1", data=df_final)
-        st.success("✅ Diagnóstico registrado com sucesso no banco de dados da UFPE!")
+        st.success("✅ Diagnóstico registrado com sucesso!")
     except Exception as e:
         st.error(f"Erro ao salvar: {e}")
 
@@ -276,3 +276,4 @@ st.markdown(f"""
         Mestrado Profissional em Gestão Pública | UFPE</p>
     </div>
 """, unsafe_allow_html=True)
+
