@@ -182,40 +182,45 @@ with g3:
 
 st.markdown(f"<div class='res-box-clean'><p style='color: #000; font-weight: bold; margin-bottom: 2px; font-size: 0.85rem;'>Índice Geral de Conformidade</p><h1 style='font-size: 2.5rem !important; color: #EB5E28; margin:0;'>{icn:.2f}</h1></div>", unsafe_allow_html=True)
 
-# 6. EXPORTAÇÃO E SALVAMENTO (VERSÃO ROBUSTA)
+# 6. EXPORTAÇÃO E SALVAMENTO (SISTEMA DE DIAGNÓSTICO)
 output = BytesIO()
 with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
     pd.DataFrame(respostas_excel).to_excel(writer, index=False)
 
-try:
-    if st.download_button("📥 Gerar Relatório Profissional (Excel)", 
-                          data=output.getvalue(), 
-                          file_name=f"ICN_{nome_inst}.xlsx", 
-                          type="primary", 
-                          use_container_width=True):
-        
-        # O sistema busca a URL direto dos Secrets
-        url_planilha = st.secrets["connections"]["gsheets"]["spreadsheet"]
-        
-        nova_linha = pd.DataFrame([{
-            "Data": pd.Timestamp.now().strftime("%d/%m/%Y %H:%M"),
-            "Instituicao": nome_inst,
-            "Contato": contato_resp,
-            "ICL": round(icl, 2),
-            "ICP": round(icp, 2),
-            "ICN": round(icn, 2)
-        }])
-        
-        # Lendo e atualizando usando a URL explícita
-        existentes = conn.read(spreadsheet=url_planilha, worksheet="Página1")
-        atualizado = pd.concat([existentes, nova_linha], ignore_index=True)
-        conn.update(spreadsheet=url_planilha, worksheet="Página1", data=atualizado)
-        
-        st.success("✅ Diagnóstico registrado com sucesso no banco de dados da UFPE!")
+if st.download_button("📥 Gerar Relatório Profissional (Excel)", 
+                      data=output.getvalue(), 
+                      file_name=f"ICN_{nome_inst}.xlsx", 
+                      type="primary", 
+                      use_container_width=True):
+    try:
+        # 1. Verifica se os Secrets existem
+        if "connections" not in st.secrets:
+            st.error("Erro: Configurações de 'Secrets' não encontradas no Streamlit Cloud.")
+        else:
+            # 2. Tenta capturar a URL
+            url_planilha = st.secrets["connections"]["gsheets"]["spreadsheet"]
+            
+            nova_linha = pd.DataFrame([{
+                "Data": pd.Timestamp.now().strftime("%d/%m/%Y %H:%M"),
+                "Instituicao": nome_inst,
+                "Contato": contato_resp,
+                "ICL": round(icl, 2),
+                "ICP": round(icp, 2),
+                "ICN": round(icn, 2)
+            }])
+            
+            # 3. Tenta ler a planilha (Aqui é onde a maioria dos erros acontece)
+            # Tente mudar "Página1" para "Sheet1" se a sua planilha estiver em inglês
+            existentes = conn.read(spreadsheet=url_planilha, worksheet="Página1")
+            atualizado = pd.concat([existentes, nova_linha], ignore_index=True)
+            
+            # 4. Tenta gravar
+            conn.update(spreadsheet=url_planilha, worksheet="Página1", data=atualizado)
+            st.success("✅ Diagnóstico registrado com sucesso no banco de dados da UFPE!")
 
-except Exception as e:
-    # Esta linha vai nos dizer EXATAMENTE o que falta se falhar
-    st.error(f"Erro detalhado: {e}")
+    except Exception as e:
+        st.error(f"Ocorreu um problema técnico: {e}")
+        st.info("Dica: Verifique se você compartilhou a planilha com o e-mail da conta de serviço como 'Editor'.")
 
 # 7. RODAPÉ ORIGINAL RESTAURADO
 st.write("<br>", unsafe_allow_html=True)
@@ -227,4 +232,5 @@ st.markdown(f"""
         Mestrado Profissional em Gestão Pública | UFPE</p>
     </div>
 """, unsafe_allow_html=True)
+
 
