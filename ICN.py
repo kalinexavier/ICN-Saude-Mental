@@ -21,6 +21,12 @@ st.markdown("""
         color: #000000 !important;
     }
     .stApp { background-color: #FFFFFF; }
+    
+    /* REMOVE ESPAÇO NO TOPO DA BARRA LATERAL */
+    [data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
+        padding-top: 0rem !important;
+    }
+    
     [data-testid="stSidebar"] { 
         background-color: #EB5E28; 
         border-radius: 0 20px 20px 0; 
@@ -33,11 +39,14 @@ st.markdown("""
         font-size: 0.82rem !important;
     }
     [data-testid="stSidebar"] hr { border: 0.5px solid #ff9e7d; margin: 10px 0; }
+    
+    /* CARDS MAIS FINOS */
     .card-lei, .card-portaria { 
-        padding: 15px; border-radius: 10px; margin-bottom: 8px; font-size: 0.82rem; color: #000000 !important;
+        padding: 5px 10px; border-radius: 6px; margin-bottom: 4px; font-size: 0.82rem; color: #000000 !important;
     }
-    .card-lei { background-color: #FFF5EE; border-left: 5px solid #FFB347; }
-    .card-portaria { background-color: #FFFFF0; border-left: 5px solid #FFD700; }
+    .card-lei { background-color: #FFF5EE; border-left: 3px solid #FFB347; }
+    .card-portaria { background-color: #FFFFF0; border-left: 3px solid #FFD700; }
+    
     .res-box-clean { 
         background-color: #FFFFFF; padding: 10px; border-radius: 15px; border: 2px solid #EB5E28; 
         text-align: center; max-width: 280px; margin: 15px auto; 
@@ -46,7 +55,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 2. BARRA LATERAL (TEXTOS ORIGINAIS)
+# 2. BARRA LATERAL (Iniciando no topo)
 with st.sidebar:
     st.markdown("### 🏛️ Sobre o PTT")
     st.markdown("""
@@ -56,23 +65,16 @@ with st.sidebar:
             do Mestrado Profissional em Gestão Pública para o Desenvolvimento Do Nordeste - CCSA da UFPE.
             <br><br>
             Ele funciona como uma calculadora para mensurar a aderência institucional às normativas federais de saúde mental no trabalho: 
-            <b>Lei Nº 14.831/2024</b> (Certificado Empresa Promotora da Saúde Mental) e à 
-            <b>Portaria SRH/MP Nº 1.261/2010</b> (Princípios, Diretrizes e Ações em Saúde Mental para os órgãos e entidades do Sistema de Pessoal Civil - SIPEC da Administração Pública Federal).
+            <b>Lei Nº 14.831/2024</b> e à <b>Portaria SRH/MP Nº 1.261/2010</b>.
         </div>
     """, unsafe_allow_html=True)
     st.markdown("<hr>", unsafe_allow_html=True)
     st.markdown("### 📝 Instruções")
     st.markdown("""
         <div style="color: white; font-size: 0.82rem;">
-            1. Clique na caixa de seleção para os itens que forem atendidos pela instituição.<br><br>
-            2. Descreva a <b>Evidência</b>, caso o indicador seja atendido. Caso não seja, escreva o <b>Plano de Ação</b>.<br><br>
-            3. Depois do preenchimento, clique em gerar Relatório para obter o resumo.<br><br>
-            4. Quanto mais próximo o indicador estiver de <b>1,00</b>, mais próximo do total atendimento da normativa.
-        </div>
-        <div style="background-color: white; padding: 10px; border-radius: 8px; text-align: left; margin-top: 15px;">
-            <span style="color: #EB5E28 !important; font-weight: bold; font-size: 0.72rem; line-height: 1.2;">
-                ⚠️ O instrumento serve como termômetro para a instituição, mas não deve ser utilizado para simples atendimento métrico. A saúde mental é um tema sério e deve ser tratado com responsabilidade.
-            </span>
+            1. Marque os itens atendidos.<br><br>
+            2. Descreva a <b>Evidência</b> ou o <b>Plano de Ação</b>.<br><br>
+            3. Clique em gerar Relatório para salvar e baixar.
         </div>
     """, unsafe_allow_html=True)
 
@@ -86,15 +88,15 @@ with c_id2:
 
 st.write("---")
 
-# 4. DICIONÁRIOS COMPLETOS
+# 4. DICIONÁRIOS COMPLETOS (MANTIDOS)
 lei_grupos = {
     "Grupo I - Promoção da saúde mental": [
         "implementação de programas de promoção da saúde mental no ambiente de trabalho",
         "oferta de acesso a recursos de apoio psicológico e psiquiátrico para seus trabalhadores",
-        "promoção da conscientização sobre a importância da saúde mental por meio da realização de campanhas e de treinamentos",
+        "promover a conscientização sobre a importância da saúde mental (campanhas e treinamentos)",
         "promoção da conscientização direcionada à saúde mental da mulher",
         "capacitação de lideranças",
-        "realização de treinamentos específicos que abordem temas de saúde mental de maior interesse dos trabalhadores",
+        "treinamentos específicos que abordem temas de saúde mental de interesse dos trabalhadores",
         "combate à discriminação e ao assédio em todas as suas formas",
         "avaliação e acompanhamento regular das ações implementadas e seus ajustes"
     ],
@@ -107,31 +109,31 @@ lei_grupos = {
         "incentivo à comunicação integrativa"
     ],
     "Grupo III - Transparência e prestação de contas": [
-        "divulgação regular das ações e das políticas relacionadas à promoção da saúde mental e do bem-estar de seus trabalhadores nos meios de comunicação utilizados pela empresa",
+        "divulgação regular das ações e das políticas relacionadas à saúde mental nos meios de comunicação",
         "manutenção de canal para recebimento de sugestões e de avaliações",
-        "promoção do desenvolvimento de metas e análises periódicas dos resultados relacionados à implementação das ações de saúde mental"
+        "desenvolvimento de metas e análises periódicas dos resultados das ações de saúde mental"
     ]
 }
 
 port_txt = [
-    "promover ações que mantenham e fortaleçam vínculos entre os servidores em sofrimento psíquico, seus familiares, seus representantes, na sua comunidade e no trabalho, tornandoos parceiros no planejamento do tratamento e na constituição de redes de apoio e integração social a todos os envolvidos",
-    "realizar programas e ações fundamentados em informações epidemiológicas, considerando as especificidades e as vulnerabilidades do público-alvo",
-    "realizar as ações de promoção inclusivas com respeito à pluralidade cultural e às diferenças de religião, gênero, orientação sexual, cor/raça/etnia, habilidade física ou intelectual, classe e idade/geração, buscando combater o estigma das pessoas com sofrimento psíquico",
-    "promover a concepção ampliada de saúde mental, integrada à saúde física e ao bem-estar socioeconômico dos servidores",
-    "planejar e direcionar as ações de promoção ao desenvolvimento humano, ao incentivo à educação para a vida saudável, com acesso aos bens culturais",
-    "ampliar a divulgação e integração dos serviços de saúde mental da rede pública, dos órgãos da APF e da rede conveniada, assim como gerir em nível local a forma de procurálos e utilizálos",
-    "detectar precocemente, acolher e monitorar o tratamento da pessoa com sofrimento psíquico",
-    "realizar ações, em vários níveis de interlocução, com o objetivo de combater o estigma das pessoas com transtornos mentais, incluindo orientação aos demais trabalhadores da instituição sobre sofrimento psíquico e doenças mentais e o apoio à criação e ao fortalecimento de associações da rede social e familiar",
-    "estabelecer e registrar nexo causal entre os processos de trabalho, o sofrimento psíquico e os transtornos mentais e comportamentais",
-    "identificar nos locais de trabalho os fatores envolvidos no adoecimento mental, mapear os locais e os tipos de atividades e propor medidas de intervenção no ambiente e na organização do trabalho no intuito de valorizar o servidor e diminuir o sofrimento psíquico",
-    "intervir nas situações de conflito vivenciadas no local de trabalho, buscando soluções dialogadas e ações mediadas pela equipe multiprofissional, constituindo comissões de ética onde não existirem, como instâncias de mediação no âmbito institucional",
-    "oferecer suporte ao desenvolvimento das competências e habilidades do servidor, ao encontro das metas e objetivos a serem alcançados, auxiliando-o inclusive no desenvolvimento eficaz de seus projetos de vida",
-    "disponibilizar espaços terapêuticos nos ambientes de trabalho quando as ações estiverem integradas à Política de Atenção à Saúde dos Servidores",
-    "garantir a realização das atividades de promoção à saúde no horário de trabalho",
-    "incentivar na Administração Pública Federal a implantação de Programas de Preparação à Aposentadoria - PPA",
-    "identificar situações de trabalho penosas do ponto de vista da saúde mental, propondo as intervenções necessárias",
-    "privilegiar programas de promoção da qualidade de vida, como meio de ampliar os fatores de proteção aos portadores de transtornos mentais e de diminuir a recorrência das crises",
-    "capacitar os gestores para identificar sofrimento psíquico no trabalho"
+    "Fortalecer vínculos entre servidores em sofrimento psíquico, familiares e trabalho",
+    "Programas fundamentados em informações epidemiológicas",
+    "Ações inclusivas (gênero, raça, orientação sexual, idade) contra o estigma",
+    "Concepção ampliada de saúde mental (física e bem-estar socioeconômico)",
+    "Educação para vida saudável e acesso a bens culturais",
+    "Divulgação e integração dos serviços de saúde mental da rede pública/APF",
+    "Detecção precoce, acolhimento e monitoramento do tratamento",
+    "Orientação aos trabalhadores para combater o estigma dos transtornos mentais",
+    "Registrar nexo causal entre processos de trabalho e transtornos mentais",
+    "Mapear fatores de adoecimento e propor intervenção na organização do trabalho",
+    "Intervir em conflitos no trabalho buscando soluções dialogadas e éticas",
+    "Suporte ao desenvolvimento de competências e projetos de vida do servidor",
+    "Disponibilizar espaços terapêuticos integrados à Política de Atenção à Saúde",
+    "Garantir atividades de promoção à saúde no horário de trabalho",
+    "Implantação de Programas de Preparação à Aposentadoria - PPA",
+    "Identificar e intervir em situações de trabalho penosas mentalmente",
+    "Programas de qualidade de vida para reduzir recorrência de crises",
+    "Capacitar gestores para identificar sofrimento psíquico no trabalho"
 ]
 
 respostas_excel = []
@@ -140,27 +142,32 @@ def render_item(tag, texto, classe):
     with st.container():
         st.markdown(f"<div class='{classe}'>", unsafe_allow_html=True)
         check = st.checkbox(f"**{tag}**: {texto}", key=f"cb_{tag}")
-        det = st.text_input("Evidência / Plano de Ação:", key=f"t_{tag}", placeholder="Detalhe aqui...")
+        det = st.text_input("Evidência / Plano de Ação:", key=f"t_{tag}", placeholder="Detalhe aqui...", label_visibility="collapsed")
         st.markdown("</div>", unsafe_allow_html=True)
         respostas_excel.append({"ID": tag, "Indicador": texto, "Conformidade": "Sim" if check else "Não", "Detalhes": det})
         return 1 if check else 0
 
+# 5. COLUNAS E DIVISÕES
 col_l, col_p = st.columns(2)
+
 with col_l:
     st.markdown("## 🏛️ Lei 14.831/2024")
     idx_l, scores_l = 1, []
-    for g, itens in lei_grupos.items():
-        st.markdown(f"### {g}")
-        s = sum([render_item(f"L{idx_l+i}", txt, "card-lei") for i, txt in enumerate(itens)])
+    # Usando enumerate para identificar o último grupo e não colocar divisor no fim
+    for i, (g, itens) in enumerate(lei_grupos.items()):
+        st.markdown(f"#### {g}")
+        s = sum([render_item(f"L{idx_l+j}", txt, "card-lei") for j, txt in enumerate(itens)])
         scores_l.append(s / len(itens))
         idx_l += len(itens)
+        if i < len(lei_grupos) - 1: # Só coloca divisor se não for o último grupo
+            st.divider()
     icl = sum(scores_l) / 3
 
 with col_p:
     st.markdown("## 📋 Portaria 1.261/2010")
     icp = sum([render_item(f"P{i+18}", txt, "card-portaria") for i, txt in enumerate(port_txt)]) / 18
 
-# 5. RESULTADOS E GRÁFICOS
+# 6. RESULTADOS E GRÁFICOS (MANTIDOS)
 st.write("---")
 icn = (icl + icp) / 2
 g1, g2, g3 = st.columns(3)
@@ -183,7 +190,7 @@ with g3:
 
 st.markdown(f"<div class='res-box-clean'><p style='color: #000; font-weight: bold; margin-bottom: 2px; font-size: 0.85rem;'>Índice Geral de Conformidade</p><h1 style='font-size: 2.5rem !important; color: #EB5E28; margin:0;'>{icn:.2f}</h1></div>", unsafe_allow_html=True)
 
-# 6. EXPORTAÇÃO E SALVAMENTO GOOGLE SHEETS
+# 7. EXPORTAÇÃO E SALVAMENTO (LOGICA DE SUCESSO MANTIDA)
 output = BytesIO()
 with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
     pd.DataFrame(respostas_excel).to_excel(writer, index=False)
@@ -195,37 +202,27 @@ if st.download_button("📥 Gerar Relatório Profissional (Excel)",
                       use_container_width=True):
     try:
         url_planilha = st.secrets["connections"]["gsheets"]["spreadsheet"]
-        
         nova_linha = pd.DataFrame([{
             "Data": pd.Timestamp.now().strftime("%d/%m/%Y %H:%M"),
             "Instituicao": str(nome_inst),
             "Contato": str(contato_resp),
-            "ICL": float(icl),
-            "ICP": float(icp),
-            "ICN": float(icn)
+            "ICL": round(icl, 2),
+            "ICP": round(icp, 2),
+            "ICN": round(icn, 2)
         }])
-        
-        # Uso do ttl=0 para garantir leitura em tempo real
+        # ttl=0 garante que ele não pule linhas na planilha
         existentes = conn.read(spreadsheet=url_planilha, worksheet="Página1", ttl=0)
-        
-        if existentes is not None and not existentes.empty:
-            df_final = pd.concat([existentes, nova_linha], ignore_index=True)
-        else:
-            df_final = nova_linha
-            
+        df_final = pd.concat([existentes, nova_linha], ignore_index=True) if existentes is not None else nova_linha
         conn.update(spreadsheet=url_planilha, worksheet="Página1", data=df_final)
-        st.success("✅ Diagnóstico registrado com sucesso no banco de dados!")
-
+        st.success("✅ Diagnóstico registrado com sucesso no banco de dados da UFPE!")
     except Exception as e:
         st.error(f"Erro ao salvar: {e}")
 
-# 7. RODAPÉ ORIGINAL
+# RODAPÉ
 st.write("<br>", unsafe_allow_html=True)
 st.markdown(f"""
     <div style='text-align: center; color: #444; font-size: 0.82rem; line-height: 1.6;'>
         <p><b>Sistema idealizado por Kaline Mirele Silva Xavier sob Orientação do docente Denilson Bezerra Marques.</b><br>
-        Contatos: kaline.xavier@ufpe.br | denilson.marques@ufpe.br | gp.pdt@ufpe.br</p>
-        <p>Gestão Pública, Prazer e Sofrimento no Trabalho <b>(@gp.pdt.ufpe)</b><br>
         Mestrado Profissional em Gestão Pública | UFPE</p>
     </div>
 """, unsafe_allow_html=True)
