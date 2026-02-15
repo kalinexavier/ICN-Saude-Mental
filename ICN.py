@@ -120,44 +120,78 @@ with col_port:
         soma_p += render_item(f"P{i+18}", txt, "Portaria 1.261", "card-portaria")
     icp = soma_p / 18
 
-# 5. CÁLCULO E GRÁFICOS
-icn = (icl + icp) / 2
+# 5. CÁLCULO DOS ÍNDICES
 st.write("---")
-c_g1, c_g2, c_res = st.columns([1, 1, 1])
+icl = sum(scores_lei.values()) / 3
+icp = soma_p / 18
+icn = (icl + icp) / 2
+
+# 6. VISUALIZAÇÃO DOS GRÁFICOS E RESULTADO
+c_g1, c_g2, c_res = st.columns([1.2, 1, 1])
 
 with c_g1:
+    st.markdown("##### Performance Lei 14.831 (por Grupo)")
     fig_l = go.Figure(go.Bar(
         x=['Grupo I', 'Grupo II', 'Grupo III', 'Média ICL'],
-        y=[scores_lei["Grupo I - Promoção da saúde mental"], scores_lei["Grupo II - Bem-estar dos trabalhadores"], scores_lei["Grupo III - Transparência e prestação de contas"], icl],
-        marker_color='#FFB347', text=[f"{v:.2f}" for v in list(scores_lei.values()) + [icl]], textposition='auto'
+        y=[scores_lei["Grupo I - Promoção da saúde mental"], 
+           scores_lei["Grupo II - Bem-estar dos trabalhadores"], 
+           scores_lei["Grupo III - Transparência e prestação de contas"], 
+           icl],
+        marker_color='#FFB347', 
+        text=[f"{v:.2f}" for v in [scores_lei["Grupo I - Promoção da saúde mental"], 
+                                   scores_lei["Grupo II - Bem-estar dos trabalhadores"], 
+                                   scores_lei["Grupo III - Transparência e prestação de contas"], 
+                                   icl]],
+        textposition='auto'
     ))
-    fig_l.update_layout(title="Performance Lei 14.831", yaxis=dict(range=[0, 1.1]), height=350)
+    fig_l.update_layout(yaxis=dict(range=[0, 1.1]), height=350, margin=dict(l=0, r=0, t=30, b=0))
     st.plotly_chart(fig_l, use_container_width=True)
 
 with c_g2:
-    fig_p = go.Figure(go.Bar(x=['Média ICP'], y=[icp], marker_color='#FFF9A6', text=[f"{icp:.2f}"], textposition='auto'))
-    fig_p.update_layout(title="Performance Portaria 1.261", yaxis=dict(range=[0, 1.1]), height=350)
+    st.markdown("##### Performance Portaria 1.261")
+    fig_p = go.Figure(go.Bar(
+        x=['Média ICP'], 
+        y=[icp], 
+        marker_color='#FFD700', 
+        text=[f"{icp:.2f}"], 
+        textposition='auto'
+    ))
+    fig_p.update_layout(yaxis=dict(range=[0, 1.1]), height=350, margin=dict(l=0, r=0, t=30, b=0))
     st.plotly_chart(fig_p, use_container_width=True)
 
 with c_res:
     st.markdown(f"""
         <div class='res-box-clean'>
-            <p style='color: #444; font-weight: bold;'>Índice de Conformidade Geral</p>
-            <h1 style='font-size: 85px !important; color: #EB5E28; margin:0;'>{icn:.2f}</h1>
-            <p style='font-size: 0.9rem; color: #666;'>Média ICL + ICP</p>
+            <p style='color: #444; font-weight: bold; font-size: 1.1rem;'>Índice de Conformidade Geral (ICN)</p>
+            <h1 style='font-size: 80px !important; color: #EB5E28; margin:0;'>{icn:.2f}</h1>
+            <p style='font-size: 0.9rem; color: #666;'>Média entre ICL e ICP</p>
         </div>
     """, unsafe_allow_html=True)
 
-# 6. EXPORTAÇÃO EXCEL
+# 7. EXPORTAÇÃO EXCEL
+st.write("<br>", unsafe_allow_html=True)
 output = BytesIO()
 with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-    df = pd.DataFrame(respostas_excel)
-    df.to_excel(writer, index=False, sheet_name='Diagnóstico')
-    # (O código de formatação Excel anterior pode ser mantido aqui para o download)
+    df_detalhes = pd.DataFrame(respostas_excel)
+    df_detalhes.to_excel(writer, sheet_name='Diagnóstico Detalhado', index=False)
 
-st.download_button("📥 Gerar Relatório Profissional (Excel)", data=output.getvalue(), file_name="ICN_Saude_Mental.xlsx", mime="application/vnd.ms-excel", type="primary", use_container_width=True)
+st.download_button(
+    label="📥 Gerar Relatório Profissional (Excel)",
+    data=output.getvalue(),
+    file_name="ICN_Saude_Mental_UFPE.xlsx",
+    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    use_container_width=True,
+    type="primary"
+)
 
-# 7. RODAPÉ (CRÉDITOS ATUALIZADOS)
+# 8. RODAPÉ E CRÉDITOS
 st.write("<br><hr>", unsafe_allow_html=True)
 st.markdown("""
-<div style='text-align: center; color: #4
+    <div style='text-align: center; color: #444; font-size: 0.85rem; line-height: 1.6;'>
+        <p><b>Sistema idealizado por Kaline Xavier sob Orientação do docente Denilson Bezerra Marques.</b><br>
+        Contatos: kaline.xavier@ufpe.br | denilson.marques@ufpe.br | gp.pdt@ufpe.br</p>
+        <p>Gestão Pública, Prazer e Sofrimento no Trabalho <b>(@gp.pdt.ufpe)</b><br>
+        Mestrado Profissional em Gestão Pública | UFPE</p>
+    </div>
+""", unsafe_allow_html=True)
+
