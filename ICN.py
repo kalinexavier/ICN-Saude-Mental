@@ -7,6 +7,9 @@ from io import BytesIO
 # 1. CONFIGURAÇÃO DA PÁGINA
 st.set_page_config(page_title="ICN - Kaline Xavier", layout="wide", page_icon="📊")
 
+# CONEXAO
+conn = st.connection("gsheets", type=GSheetsConnection)
+
 # ESTILIZAÇÃO CSS
 st.markdown("""
     <style>
@@ -223,5 +226,6 @@ st.markdown(f"""
         Mestrado Profissional em Gestão Pública | UFPE</p>
     </div>
 """, unsafe_allow_html=True)
+
 
 
