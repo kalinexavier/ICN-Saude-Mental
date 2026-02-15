@@ -182,7 +182,7 @@ with g3:
 
 st.markdown(f"<div class='res-box-clean'><p style='color: #000; font-weight: bold; margin-bottom: 2px; font-size: 0.85rem;'>Índice Geral de Conformidade</p><h1 style='font-size: 2.5rem !important; color: #EB5E28; margin:0;'>{icn:.2f}</h1></div>", unsafe_allow_html=True)
 
-# 6. EXPORTAÇÃO E SALVAMENTO (VERSÃO CORRIGIDA)
+# 6. EXPORTAÇÃO E SALVAMENTO (SISTEMA ANTI-SOBREPOSIÇÃO)
 output = BytesIO()
 with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
     pd.DataFrame(respostas_excel).to_excel(writer, index=False)
@@ -195,7 +195,7 @@ if st.download_button("📥 Gerar Relatório Profissional (Excel)",
     try:
         url_planilha = st.secrets["connections"]["gsheets"]["spreadsheet"]
         
-        # Criamos a nova linha com os nomes EXATOS da planilha
+        # 1. Preparamos o dado novo
         nova_linha = pd.DataFrame([{
             "Data": pd.Timestamp.now().strftime("%d/%m/%Y %H:%M"),
             "Instituicao": str(nome_inst),
@@ -205,20 +205,21 @@ if st.download_button("📥 Gerar Relatório Profissional (Excel)",
             "ICN": float(icn)
         }])
         
-        # Lemos os dados existentes
-        existentes = conn.read(spreadsheet=url_planilha, worksheet="Página1")
+        # 2. LEMOS o que já está lá (MUITO IMPORTANTE)
+        # O clear_cache garante que ele pegue os dados mais recentes, não uma cópia antiga
+        existentes = conn.read(spreadsheet=url_planilha, worksheet="Página1", ttl=0)
         
-        # Se a planilha estiver vazia ou com erro de colunas, garantimos que os dados se alinhem
+        # 3. JUNTAMOS o passado com o presente
         if existentes is not None and not existentes.empty:
-            # Forçamos a nova linha a ter as mesmas colunas da planilha atual
-            atualizado = pd.concat([existentes, nova_linha], ignore_index=True, sort=False)
+            # O concat "empilha" a nova_linha embaixo dos existentes
+            df_final = pd.concat([existentes, nova_linha], ignore_index=True)
         else:
-            atualizado = nova_linha
+            df_final = nova_linha
             
-        # Atualiza a planilha (isso adiciona a linha nova mantendo as antigas)
-        conn.update(spreadsheet=url_planilha, worksheet="Página1", data=atualizado)
+        # 4. SALVAMOS o bloco inteiro atualizado
+        conn.update(spreadsheet=url_planilha, worksheet="Página1", data=df_final)
         
-        st.success("✅ Diagnóstico registrado com sucesso no banco de dados!")
+        st.success("✅ Diagnóstico registrado com sucesso! Verifique sua planilha.")
 
     except Exception as e:
         st.error(f"Erro ao salvar: {e}")
@@ -233,6 +234,7 @@ st.markdown(f"""
         Mestrado Profissional em Gestão Pública | UFPE</p>
     </div>
 """, unsafe_allow_html=True)
+
 
 
 
