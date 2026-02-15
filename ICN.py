@@ -7,10 +7,10 @@ from io import BytesIO
 # 1. CONFIGURAÇÃO DA PÁGINA
 st.set_page_config(page_title="ICN - Kaline Xavier", layout="wide", page_icon="📊")
 
-# CONEXAO
+# CONEXÃO COM GOOGLE SHEETS (Posicionada corretamente no topo)
 conn = st.connection("gsheets", type=GSheetsConnection)
 
-# ESTILIZAÇÃO CSS
+# ESTILIZAÇÃO CSS (Suas cores e tamanhos de fonte preservados)
 st.markdown("""
     <style>
     html, body, [class*="st-"] {
@@ -47,7 +47,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 2. BARRA LATERAL 
+# 2. BARRA LATERAL (Seus textos originais completos)
 with st.sidebar:
     st.markdown("### 🏛️ Sobre o PTT")
     st.markdown("""
@@ -61,7 +61,6 @@ with st.sidebar:
             <b>Portaria SRH/MP Nº 1.261/2010</b> (Princípios, Diretrizes e Ações em Saúde Mental para os órgãos e entidades do Sistema de Pessoal Civil - SIPEC da Administração Pública Federal).
         </div>
     """, unsafe_allow_html=True)
-    
     st.markdown("<hr>", unsafe_allow_html=True)
     st.markdown("### 📝 Instruções")
     st.markdown("""
@@ -80,7 +79,6 @@ with st.sidebar:
 
 # 3. PÁGINA PRINCIPAL
 st.markdown("<h1>Índice de Conformidade às Normativas Federais de Saúde Mental</h1>", unsafe_allow_html=True)
-
 c_id1, c_id2 = st.columns(2)
 with c_id1:
     nome_inst = st.text_input("🏢 Nome da Instituição/Unidade:", placeholder="Ex: UFPE - Progepe")
@@ -89,7 +87,7 @@ with c_id2:
 
 st.write("---")
 
-# 4. DICIONÁRIOS 
+# 4. DICIONÁRIOS COMPLETOS
 lei_grupos = {
     "Grupo I - Promoção da saúde mental": [
         "implementação de programas de promoção da saúde mental no ambiente de trabalho",
@@ -184,12 +182,11 @@ with g3:
 
 st.markdown(f"<div class='res-box-clean'><p style='color: #000; font-weight: bold; margin-bottom: 2px; font-size: 0.85rem;'>Índice Geral de Conformidade</p><h1 style='font-size: 2.5rem !important; color: #EB5E28; margin:0;'>{icn:.2f}</h1></div>", unsafe_allow_html=True)
 
-# 6. EXPORTAÇÃO E SALVAMENTO
+# 6. EXPORTAÇÃO E SALVAMENTO (GOOLGE SHEETS)
 output = BytesIO()
 with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
     pd.DataFrame(respostas_excel).to_excel(writer, index=False)
 
-# Aqui começa a parte de salvar no Google Sheets
 try:
     if st.download_button("📥 Gerar Relatório Profissional (Excel)", 
                           data=output.getvalue(), 
@@ -197,7 +194,7 @@ try:
                           type="primary", 
                           use_container_width=True):
         
-        # Prepara os dados para a planilha
+        # Prepara a linha para o Google Sheets
         nova_linha = pd.DataFrame([{
             "Data": pd.Timestamp.now().strftime("%d/%m/%Y %H:%M"),
             "Instituicao": nome_inst,
@@ -207,16 +204,17 @@ try:
             "ICN": round(icn, 2)
         }])
         
-        # Envia para a planilha (verifique se o nome é Página1)
+        # ATENÇÃO: Verifique se o nome da aba é Página1 ou Sheet1
         existentes = conn.read(worksheet="Página1")
         atualizado = pd.concat([existentes, nova_linha], ignore_index=True)
         conn.update(worksheet="Página1", data=atualizado)
         
         st.success("✅ Diagnóstico registrado com sucesso no banco de dados da UFPE!")
-except Exception as e:
-    st.error(f"Erro ao salvar dados: {e}")
 
-# 7. RODAPÉ 
+except Exception as e:
+    st.error(f"Erro ao salvar dados na planilha: {e}")
+
+# 7. RODAPÉ ORIGINAL RESTAURADO
 st.write("<br>", unsafe_allow_html=True)
 st.markdown(f"""
     <div style='text-align: center; color: #444; font-size: 0.82rem; line-height: 1.6;'>
@@ -226,6 +224,3 @@ st.markdown(f"""
         Mestrado Profissional em Gestão Pública | UFPE</p>
     </div>
 """, unsafe_allow_html=True)
-
-
-
