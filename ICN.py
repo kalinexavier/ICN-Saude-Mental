@@ -181,22 +181,20 @@ with g3:
 
 st.markdown(f"<div class='res-box-clean'><p style='color: #000; font-weight: bold; margin-bottom: 2px; font-size: 0.85rem;'>Índice Geral de Conformidade</p><h1 style='font-size: 2.5rem !important; color: #EB5E28; margin:0;'>{icn:.2f}</h1></div>", unsafe_allow_html=True)
 
-6. EXPORTAÇÃO E SALVAMENTO 
+# 6. EXPORTAÇÃO E SALVAMENTO
 output = BytesIO()
 with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
     pd.DataFrame(respostas_excel).to_excel(writer, index=False)
 
-# Tenta conectar e salvar
+# Aqui começa a parte de salvar no Google Sheets
 try:
-    conn = st.connection("gsheets", type=GSheetsConnection)
-    
     if st.download_button("📥 Gerar Relatório Profissional (Excel)", 
                           data=output.getvalue(), 
                           file_name=f"ICN_{nome_inst}.xlsx", 
                           type="primary", 
                           use_container_width=True):
         
-        # Dados que serão salvos na planilha
+        # Prepara os dados para a planilha
         nova_linha = pd.DataFrame([{
             "Data": pd.Timestamp.now().strftime("%d/%m/%Y %H:%M"),
             "Instituicao": nome_inst,
@@ -206,15 +204,14 @@ try:
             "ICN": round(icn, 2)
         }])
         
-        # Nome da aba tem que ser igual ao da planilha (ex: Página1)
-        existentes = conn.read(worksheet="Página1") 
+        # Envia para a planilha (verifique se o nome é Página1)
+        existentes = conn.read(worksheet="Página1")
         atualizado = pd.concat([existentes, nova_linha], ignore_index=True)
         conn.update(worksheet="Página1", data=atualizado)
         
-        st.success("✅ Diagnóstico registrado com sucesso!")
+        st.success("✅ Diagnóstico registrado com sucesso no banco de dados da UFPE!")
 except Exception as e:
-    # Se der erro, ele vai te mostrar um texto vermelho explicando o porquê
-    st.error(f"Erro técnico: {e}")
+    st.error(f"Erro ao salvar dados: {e}")
 
 # 7. RODAPÉ 
 st.write("<br>", unsafe_allow_html=True)
@@ -226,4 +223,5 @@ st.markdown(f"""
         Mestrado Profissional em Gestão Pública | UFPE</p>
     </div>
 """, unsafe_allow_html=True)
+
 
