@@ -237,10 +237,22 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# 7. EXPORTAÇÃO E SALVAMENTO
+# 7. EXPORTAÇÃO EXCEL
 output = BytesIO()
 with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-    pd.DataFrame(respostas_excel).to_excel(writer, index=False)
+    # ABA 1: CAPA/RESUMO
+    df_capa = pd.DataFrame([
+        {"CATEGORIA": "Instituição/Unidade", "VALOR": nome_inst},
+        {"CATEGORIA": "Contato", "VALOR": contato_resp},
+        {"CATEGORIA": "Data do Diagnóstico", "VALOR": pd.Timestamp.now().strftime("%d/%m/%Y %H:%M")},
+        {"CATEGORIA": "Índice de Conformidade à Lei (ICL)", "VALOR": f"{icl:.2f}"},
+        {"CATEGORIA": "Índice de Conformidade à Portaria (ICP)", "VALOR": f"{icp:.2f}"},
+        {"CATEGORIA": "Índice Geral de Conformidade (ICN)", "VALOR": f"{icn:.2f}"}
+    ])
+    df_capa.to_excel(writer, sheet_name='Resumo_Diagnostico', index=False)
+    
+    # ABA 2: DETALHAMENTO
+    pd.DataFrame(respostas_excel).to_excel(writer, sheet_name='Detalhamento_Indicadores', index=False)
 
 st.write("<br>", unsafe_allow_html=True)
 
@@ -252,17 +264,18 @@ if st.download_button("📥 Gerar Relatório Profissional (Excel)",
     try:
         url_planilha = st.secrets["connections"]["gsheets"]["spreadsheet"]
         nova_linha = pd.DataFrame([{
-            "Data": pd.Timestamp.now().strftime("%d/%m/%Y %H:%M"),
-            "Instituicao": str(nome_inst),
-            "Contato": str(contato_resp),
-            "ICL": round(icl, 2),
-            "ICP": round(icp, 2),
+            "Data": pd.Timestamp.now().strftime("%d/%m/%Y %H:%M"), 
+            "Instituicao": str(nome_inst), 
+            "Contato": str(contato_resp), 
+            "ICL": round(icl, 2), 
+            "ICP": round(icp, 2), 
             "ICN": round(icn, 2)
         }])
+        # ttl=0 mantém a atualização em tempo real no Google Sheets
         existentes = conn.read(spreadsheet=url_planilha, worksheet="Página1", ttl=0)
         df_final = pd.concat([existentes, nova_linha], ignore_index=True) if existentes is not None else nova_linha
         conn.update(spreadsheet=url_planilha, worksheet="Página1", data=df_final)
-        st.success("✅ Diagnóstico registrado com sucesso!")
+        st.success("✅ Diagnóstico registrado com sucesso no banco de dados da UFPE!")
     except Exception as e:
         st.error(f"Erro ao salvar: {e}")
 
@@ -276,4 +289,5 @@ st.markdown(f"""
         Mestrado Profissional em Gestão Pública | UFPE</p>
     </div>
 """, unsafe_allow_html=True)
+
 
