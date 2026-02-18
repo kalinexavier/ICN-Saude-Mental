@@ -229,7 +229,7 @@ with g3:
 st.markdown(f"""
     <div class='res-box-clean'>
         <p style='color: #000; font-weight: bold; margin-bottom: 10px; font-size: 1.1rem;'>
-            Índice Geral de Conformidade - ICN
+            Índice Geral de Conformidade - ICN-SERVMENT
         </p>
         <h1 style='font-size: 4rem !important; color: #EB5E28; margin:0;'>
             {icn:.2f}
@@ -289,6 +289,7 @@ st.markdown(f"""
         Mestrado Profissional em Gestão Pública | UFPE</p>
     </div>
 """, unsafe_allow_html=True)
+
 
 
 
