@@ -1,8 +1,8 @@
-# ICN-Saude-Mental
+# ICN-ServMent
 Índice de Conformidade às Normativas Federais de Saúde Mental. Produto Técnico e Tecnológico (PTT) resultante da dissertação de Mestrado Profissional em Gestão Pública da UFPE.
 ICN - Índice de Conformidade às Normativas Federais de Saúde Mental
-Este software é um Produto Técnico e Tecnológico (PTT) desenvolvido como parte da dissertação intitulada "A POLÍTICA DE SAÚDE MENTAL DA UNIVERSIDADE FEDERAL DE PERNAMBUCO: Entre a Normativa e a Realidade Laboral à Luz da Psicodinâmica do Trabalho", 
-do Mestrado Profissional em Gestão Pública da UFPE.Profissional em Gestão Pública da Universidade Federal de Pernambuco (UFPE).
+Este software é um Produto Técnico e Tecnológico (PTT) desenvolvido como parte da dissertação intitulada "A POLÍTICA DE SAÚDE MENTAL DA UNIVERSIDADE FEDERAL DE PERNAMBUCO: Entre a Normativa e a Realidade Laboral à Luz da Psicodinâmica do Trabalho" (2026), 
+do Mestrado Profissional em Gestão Pública da UFPE da Universidade Federal de Pernambuco (UFPE).
 
 🎯 Objetivo
 O sistema tem como finalidade mensurar o grau de aderência de instituições públicas às principais diretrizes federais de saúde mental no trabalho:
@@ -14,7 +14,7 @@ Portaria SRH/MP Nº 1.261/2010: Estabelece princípios e diretrizes para a aten�
 🚀 Funcionalidades
 Diagnóstico Interativo: Interface para preenchimento dos indicadores de conformidade.
 
-Cálculo em Tempo Real: Geração imediata do Índice de Conformidade à Lei (ICL), Índice de Conformidade à Portaria (ICP) e Índice de Conformidade Geral (ICN).
+Cálculo em Tempo Real: Geração imediata do Índice de Conformidade à Lei (ICL), Índice de Conformidade à Portaria (ICP) e Índice de Conformidade Geral (ICN-ServMent).
 
 Relatório Automatizado: Exportação dos dados preenchidos e resultados finais em formato Excel (.xlsx) com formatação profissional.
 
